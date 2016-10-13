@@ -1,0 +1,24 @@
+{
+  "name": "react-native-selectable-list",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kyo504/react-native-selectable-list.git"
+  },
+  "keywords": [
+    "react-native",
+    "selectable",
+    "list"
+  ],
+  "author": "Hunkyo Jung <hunkyo.jung@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kyo504/react-native-selectable-list/issues"
+  },
+  "homepage": "https://github.com/kyo504/react-native-selectable-list#readme"
+}
