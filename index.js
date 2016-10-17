@@ -10,8 +10,8 @@ import {
 const propTypes = {
   dataSource: React.PropTypes.array.isRequired,
   selected: React.PropTypes.array,
-  onSelect: React.PropTypes.func,
   selectable: React.PropTypes.bool,
+  onSelect: React.PropTypes.func,
 }
 
 const defaultProps = {
@@ -59,6 +59,9 @@ class SelectableList extends Component {
     this.setState({
       dataSource: this.ds.cloneWithRows(newArr)
     });
+
+
+    this.props.onSelect(this.selected);    
   }
 
   /**
