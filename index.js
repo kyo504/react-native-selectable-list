@@ -8,15 +8,16 @@ import {
 } from 'react-native';
 
 const propTypes = {
-  dataSource: React.PropTypes.array.isRequired,
+  selections: React.PropTypes.array.isRequired,
   selected: React.PropTypes.array,
   selectable: React.PropTypes.bool,
-  onSelect: React.PropTypes.func,
+  onSelectionStatus: React.PropTypes.func,
 }
 
 const defaultProps = {
   selected: [],
   selectable: false,
+  onSelectionStatus: () => {},
 }
 
 class SelectableList extends Component {
@@ -31,7 +32,7 @@ class SelectableList extends Component {
     this.selected = [ ...this.props.selected ];
 
     this.state = {
-      dataSource: this.ds.cloneWithRows(props.dataSource.map((item, index) => {
+      dataSource: this.ds.cloneWithRows(props.selections.map((item, index) => {
         return {
           selected: this.selected.indexOf(index) >= 0 ? true : false,
           data: item,
@@ -41,35 +42,32 @@ class SelectableList extends Component {
   }
 
   componentWillReceiveProps(nextProps: object) {
-//    if (!nextProps.selectable) {
+    if (this.props.selectable !== nextProps.selectable || this.props.selections.length !== nextProps.selections.length) {
       this.selected = [];
-//    }
+    }
 
-    this._updateRows(nextProps.dataSource);
+    this._updateRows(nextProps.selections);
   }
 
   _updateRows(source: array) {
-    const newArr = source.map((item, index) => {
+    this.setState({
+      dataSource: this.ds.cloneWithRows(source.map((item, index) => {
         return {
           selected: this.selected.indexOf(index) >= 0 ? true : false,
           data: item,
-        }
-      });
-
-    this.setState({
-      dataSource: this.ds.cloneWithRows(newArr)
+      }}))
+    }, () => {
+      // After render is done, let parent know the selection status
+      this.props.onSelectionStatus(this.selected);
     });
-
-
-    this.props.onSelect(this.selected);    
   }
 
   /**
    * Set selected prop to true for all rows
    */
   selectAll() {
-    this.selected = this.props.dataSource.map((item, index) => index);
-    this._updateRows(this.props.dataSource);
+    this.selected = this.props.selections.map((item, index) => index);
+    this._updateRows(this.props.selections);
   }
 
   /**
@@ -77,7 +75,7 @@ class SelectableList extends Component {
    */
   deselectAll() {
     this.selected = [];
-    this._updateRows(this.props.dataSource);
+    this._updateRows(this.props.selections);
   }
 
   getSelected() {
@@ -92,7 +90,7 @@ class SelectableList extends Component {
       this.selected.splice(selectedIndex, 1);
     }
 
-    this._updateRows(this.props.dataSource);
+    this._updateRows(this.props.selections);
   }
   
   isSelected(index: number) {
